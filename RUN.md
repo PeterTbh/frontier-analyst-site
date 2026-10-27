@@ -21,6 +21,8 @@ Paths below use `$E` for the engine checkout and `$W` for the workspace checkout
    `$W/state/sources.json` and `$W/issues/manifest.json` (may not exist yet).
 4. Issue number = last number + 1 (or 1). Window: from the last issue's date (or
    `first_issue_lookback_days` ago) to today. Issue folder: `issues/<today>-no<N>` in `$W`.
+   **Guard:** if the last issue is dated today or yesterday, stop here and report
+   "Skipped: last issue is less than two days old". Do not publish or email anything.
 5. Make a task list with steps 1–9 so progress is visible.
 
 ## 1. Newsletters
