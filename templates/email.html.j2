@@ -1,0 +1,101 @@
+{%- set serif = "Georgia,'Times New Roman',serif" -%}
+{%- set sans = "-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" -%}
+{%- set label = "font-family:" ~ sans ~ ";font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:#6b6a66;" -%}
+{%- set olive = "font-family:" ~ sans ~ ";font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:#4f5d2f;" -%}
+{%- macro impact(n) -%}<span style="color:{{ '#4f5d2f' if n >= 4 else '#16161a' }};letter-spacing:1px">{{ '■' * n }}{{ '□' * (5 - n) }}</span>&nbsp;{{ n }}/5{%- endmacro -%}
+<!doctype html>
+<html lang="{{ cfg.language }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ cfg.title }} · No. {{ i.number }}</title></head>
+<body style="margin:0;padding:0;background:#f6f4ee;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f4ee;"><tr><td align="center" style="padding:24px 14px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;color:#16161a;font-family:{{ sans }};font-size:15px;line-height:1.55;">
+
+<tr><td style="border-bottom:1px solid #16161a;padding-bottom:10px;">
+  <table role="presentation" width="100%"><tr>
+    <td style="{{ label }}color:#16161a;">{{ cfg.title }}</td>
+    <td align="right" style="{{ label }}">No. {{ i.number }} · {{ i.date | longdate }}</td>
+  </tr></table>
+</td></tr>
+
+<tr><td style="padding:26px 0 22px;border-bottom:1px solid #d8d3c7;">
+  <div style="font-family:{{ serif }};font-size:32px;line-height:1.1;letter-spacing:-0.5px;margin:0 0 12px;">{{ i.title }}</div>
+  {% if i.lead %}<div style="font-family:{{ serif }};font-style:italic;font-size:17px;line-height:1.45;color:#3c3b38;">{{ i.lead }}</div>{% endif %}
+  {% if site_url %}<div style="margin-top:16px;{{ label }}"><a href="{{ site_url }}" style="color:#4f5d2f;text-decoration:none;">Read on the website &rarr;</a>&nbsp;&nbsp;·&nbsp;&nbsp;PDF available there</div>{% endif %}
+</td></tr>
+
+{% if i.overview %}
+<tr><td style="padding:22px 0 6px;">
+  <div style="{{ olive }}margin-bottom:8px;">In brief</div>
+  {% for o in i.overview %}
+  <table role="presentation" width="100%" style="border-top:1px solid #d8d3c7;"><tr>
+    <td valign="top" style="width:30px;padding:9px 0;{{ olive }}">{{ '%02d' % loop.index }}</td>
+    <td style="padding:8px 0;font-family:{{ serif }};font-size:16px;line-height:1.4;">{{ o.text }}{% if items[o.item] %}<br><span style="font-family:{{ sans }};font-size:11px;color:#6b6a66;">Impact {{ impact(items[o.item].impact) }}</span>{% endif %}</td>
+  </tr></table>
+  {% endfor %}
+</td></tr>
+{% endif %}
+
+{% for s in i.sections %}
+<tr><td style="padding-top:28px;">
+  <table role="presentation" width="100%" style="border-bottom:1px solid #16161a;"><tr>
+    <td style="font-family:{{ serif }};font-size:26px;color:#4f5d2f;width:46px;padding-bottom:8px;">{{ '%02d' % loop.index }}</td>
+    <td style="{{ label }}color:#16161a;font-size:11px;letter-spacing:2px;padding-bottom:8px;">{{ s.label }}</td>
+  </tr></table>
+  {% if not s['items'] %}<div style="padding:14px 0;color:#6b6a66;">Nothing that clears the bar this time.</div>{% endif %}
+  {% for it in s['items'] %}
+  <div style="padding:18px 0 18px;border-bottom:1px solid #d8d3c7;">
+    <div style="{{ olive }}">{{ it.kind }} <span style="color:#6b6a66;">· {{ it.date | shortdate }}</span>{% if it.new_entrant %} <span style="border:1px solid #4f5d2f;padding:2px 4px;">New entrant</span>{% endif %}</div>
+    <div style="font-family:{{ serif }};font-size:20px;line-height:1.25;margin:8px 0;"><a href="{{ it.source.url }}" style="color:#16161a;text-decoration:none;">{{ it.title }}</a></div>
+    <div style="margin:0 0 8px;">{{ it.summary }}</div>
+    <div style="margin:0 0 10px;"><b>Why it matters.</b> {{ it.why }}</div>
+    <div style="font-size:12px;line-height:1.6;color:#6b6a66;">Impact {{ impact(it.impact) }} &nbsp;·&nbsp; <b style="color:#16161a;">Credibility: {{ it.credibility }}.</b> {{ it.credibility_note }} &nbsp;·&nbsp; <a href="{{ it.source.url }}" style="color:#4f5d2f;">{{ it.source.name }}</a> ({{ it.source.type }}){% for a in it.also or [] %} · <a href="{{ a.url }}" style="color:#4f5d2f;">{{ a.name }}</a>{% endfor %}</div>
+  </div>
+  {% endfor %}
+</td></tr>
+{% endfor %}
+
+{% if i.competitors %}
+<tr><td style="padding-top:28px;">
+  <div style="{{ label }}color:#16161a;font-size:11px;letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid #16161a;">Competitor watch</div>
+  {% for c in i.competitors %}
+  <table role="presentation" width="100%" style="border-bottom:1px solid #d8d3c7;"><tr>
+    <td valign="top" style="padding:10px 10px 10px 0;width:34%;font-family:{{ serif }};font-size:16px;">{% if c.url %}<a href="{{ c.url }}" style="color:#16161a;text-decoration:none;">{{ c.company }}</a>{% else %}{{ c.company }}{% endif %}{% if c.new %}<br><span style="{{ olive }}">New</span>{% endif %}</td>
+    <td valign="top" style="padding:10px 0;font-size:14px;">{{ c.move }}<br><span style="font-size:11px;color:#6b6a66;">{{ c.date | shortdate }} · Impact {{ impact(c.impact) }}</span></td>
+  </tr></table>
+  {% endfor %}
+</td></tr>
+{% endif %}
+
+{% if i.questions %}
+<tr><td style="padding-top:28px;">
+  <div style="{{ label }}color:#16161a;font-size:11px;letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid #16161a;">Standing questions: what changed</div>
+  {% for q in i.questions %}
+  <div style="padding:12px 0;border-bottom:1px solid #d8d3c7;"><div style="font-family:{{ serif }};font-style:italic;font-size:16px;margin-bottom:4px;">{{ q.question }}</div><div style="font-size:14px;">{{ q['update'] }}</div></div>
+  {% endfor %}
+</td></tr>
+{% endif %}
+
+{% if i.coming_up %}
+<tr><td style="padding-top:28px;">
+  <div style="{{ label }}color:#16161a;font-size:11px;letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid #16161a;">Coming up</div>
+  {% for c in i.coming_up %}
+  <table role="presentation" width="100%" style="border-bottom:1px solid #d8d3c7;"><tr>
+    <td valign="top" style="padding:9px 10px 9px 0;width:90px;font-size:12px;color:#6b6a66;white-space:nowrap;">{{ c.date | shortdate }}</td>
+    <td style="padding:9px 0;font-size:14px;">{% if c.url %}<a href="{{ c.url }}" style="color:#16161a;">{{ c.what }}</a>{% else %}{{ c.what }}{% endif %}</td>
+  </tr></table>
+  {% endfor %}
+</td></tr>
+{% endif %}
+
+{% if i.note %}<tr><td style="padding-top:22px;"><div style="border-left:2px solid #4f5d2f;padding:10px 14px;font-size:14px;color:#3c3b38;">{{ i.note }}</div></td></tr>{% endif %}
+
+<tr><td style="padding-top:34px;">
+  <div style="border-top:1px solid #16161a;padding-top:12px;font-size:11.5px;line-height:1.6;color:#6b6a66;">
+    <b style="color:#16161a;">Impact on the field:</b> 1 minor · 2 noteworthy · 3 significant for a segment · 4 major, shifts direction within a year · 5 field-changing.<br>
+    <b style="color:#16161a;">Credibility:</b> High = primary source or several independent reports with numbers; Medium = reputable press, preprint or company claim; Low = single unconfirmed report. Claims are reported as the source states them.
+    {% if cfg.motif != 'none' %}<div style="margin-top:12px;font-family:{{ serif }};font-style:italic;font-size:14px;">ἀλήθεια</div>{% endif %}
+  </div>
+</td></tr>
+
+</table>
+</td></tr></table>
+</body></html>

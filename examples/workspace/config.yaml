@@ -1,0 +1,31 @@
+# Frontier Analyst workspace settings. Keep this repository PRIVATE.
+
+issue:
+  title: "Frontier Analyst"
+  language: en                 # language the issues are written in
+  max_pages: 4                 # PDF length target (A4)
+  schedule: "Tue, Fri 06:30 Europe/London"   # for reference; set the real schedule in the scheduled task
+  first_issue_lookback_days: 14
+  motif: aletheia              # "none" removes the owl / ἀλήθεια details
+
+delivery:
+  email_to:
+    - you@example.com
+  newsletter_address: ""       # optional: an address whose newsletters the run reads, e.g. you+briefing@gmail.com
+  newsletter_label: "Frontier Analyst/Newsletters"
+
+site:
+  repo: you/frontier-analyst-site
+  folder: docs
+  url: https://you.github.io/frontier-analyst-site/
+
+topics:                        # one file per section, in this order
+  - topics/example.md
+
+# Words that must never appear in an issue: your company name, project names, people.
+confidential_terms: []
+
+confidentiality: >
+  The topic files describe what the reader cares about. Never quote them, never mention the
+  reader's company, plans, locations or business model in an issue, and never publish any file
+  from this repository. Issues must read as a neutral market and research briefing.

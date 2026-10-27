@@ -1,0 +1,144 @@
+/* Frontier Analyst – issue stylesheet (web + PDF). Fonts are loaded relative to the site's docs/ folder. */
+@font-face { font-family: "Newsreader"; src: url(fonts/newsreader-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Newsreader"; src: url(fonts/newsreader-latin-500-normal.woff2) format("woff2"); font-weight: 500; font-style: normal; }
+@font-face { font-family: "Newsreader"; src: url(fonts/newsreader-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-style: normal; }
+@font-face { font-family: "Newsreader"; src: url(fonts/newsreader-latin-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; }
+@font-face { font-family: "Inter"; src: url(fonts/inter-latin-400-normal.woff2) format("woff2"); font-weight: 400; }
+@font-face { font-family: "Inter"; src: url(fonts/inter-latin-500-normal.woff2) format("woff2"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: url(fonts/inter-latin-600-normal.woff2) format("woff2"); font-weight: 600; }
+@font-face { font-family: "FA Greek"; src: url(fonts/eb-garamond-greek-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; }
+
+:root {
+  --paper: #f6f4ee;
+  --ink: #16161a;
+  --muted: #6b6a66;
+  --rule: #d8d3c7;
+  --olive: #4f5d2f;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); -webkit-text-size-adjust: 100%; }
+body { margin: 0; font: 400 15px/1.55 var(--sans); }
+a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { color: var(--olive); text-decoration-color: var(--olive); }
+.no-motif .motif { display: none !important; }
+
+.issue { max-width: 760px; margin: 0 auto; padding: 8px 0 48px; }
+
+/* Labels */
+.label {
+  font: 600 10.5px/1.2 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.label--olive { color: var(--olive); }
+
+/* Masthead */
+.top { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.top__brand { display: flex; align-items: center; gap: 8px; }
+.owl { width: 15px; height: 15px; fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transform: translateY(2px); }
+.head { padding: 34px 0 30px; border-bottom: 1px solid var(--rule); }
+.head__title { font: 400 44px/1.06 var(--serif); letter-spacing: -.02em; margin: 0 0 16px; max-width: 18ch; }
+.head__lead { font: italic 400 19px/1.45 var(--serif); color: #3c3b38; margin: 0; max-width: 54ch; }
+.head__meta { margin-top: 20px; display: flex; gap: 22px; flex-wrap: wrap; }
+
+/* In brief */
+.brief { padding: 30px 0 8px; }
+.brief__list { list-style: none; margin: 16px 0 0; padding: 0; counter-reset: b; }
+.brief__list li {
+  counter-increment: b; display: grid; grid-template-columns: 40px 1fr auto; gap: 14px; align-items: baseline;
+  padding: 11px 0; border-top: 1px solid var(--rule); font: 400 17px/1.4 var(--serif);
+}
+.brief__list li::before { content: counter(b, decimal-leading-zero); font: 500 11px/1 var(--sans); letter-spacing: .08em; color: var(--olive); }
+.brief__list a { text-decoration: none; }
+
+/* Impact meter: squares plus a number, never colour alone */
+.impact { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font: 500 11px/1 var(--sans); letter-spacing: .06em; color: var(--muted); }
+.impact i { display: inline-block; width: 7px; height: 7px; border: 1px solid var(--ink); }
+.impact i.on { background: var(--ink); }
+.impact--hi i.on { background: var(--olive); border-color: var(--olive); }
+
+/* Sections */
+.section { padding-top: 40px; }
+.section__head { display: flex; align-items: baseline; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.section__no { font: 400 34px/1 var(--serif); color: var(--olive); }
+.section__title { font: 600 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; margin: 0; }
+.section__count { margin-left: auto; }
+
+/* Items */
+.item { display: grid; grid-template-columns: 150px 1fr; column-gap: 28px; padding: 22px 0 24px; border-bottom: 1px solid var(--rule); break-inside: avoid; }
+.item__side { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.item__side .label { line-height: 1.5; }
+.item__title { font: 500 22px/1.22 var(--serif); letter-spacing: -.01em; margin: 0 0 10px; }
+.item__title a { text-decoration: none; }
+.item__summary { margin: 0 0 10px; }
+.item__why { margin: 0 0 14px; }
+.item__why b { font-weight: 600; }
+.item__foot { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; font: 400 12.5px/1.45 var(--sans); color: var(--muted); }
+.item__foot b { font-weight: 600; color: var(--ink); }
+.chip { display: inline-block; font: 600 9.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; padding: 4px 6px 3px; border: 1px solid var(--olive); color: var(--olive); }
+
+/* Ledger tables (competitors, coming up) */
+.ledger { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 14px; }
+.ledger th { text-align: left; padding: 12px 12px 8px 0; border-bottom: 1px solid var(--ink); }
+.ledger td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+.ledger td:last-child, .ledger th:last-child { padding-right: 0; }
+.ledger .co { font: 500 17px/1.25 var(--serif); white-space: nowrap; }
+.ledger .date { white-space: nowrap; color: var(--muted); font-size: 12.5px; }
+.ledger tr { break-inside: avoid; }
+
+/* Standing questions */
+.qs { margin: 0; padding: 0; list-style: none; }
+.qs li { display: grid; grid-template-columns: 1fr 1.35fr; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--rule); break-inside: avoid; }
+.qs q { font: italic 400 17px/1.4 var(--serif); quotes: none; }
+
+.note { margin-top: 28px; padding: 14px 16px; border-left: 2px solid var(--olive); color: #3c3b38; font-size: 14px; }
+
+/* Footer: method */
+.foot { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 12.5px; color: var(--muted); }
+.foot p { margin: 6px 0 0; }
+.foot__sign { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; padding-top: 8px; }
+.greek { font: italic 400 15px/1 "FA Greek", var(--serif); color: var(--muted); }
+
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .top { flex-wrap: wrap; gap: 6px 12px; }
+  .issue { padding: 0 2px 40px; }
+  .head__title { font-size: 32px; }
+  .head__lead { font-size: 17px; }
+  .item { grid-template-columns: 1fr; row-gap: 10px; }
+  .item__side { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; padding-top: 0; }
+  .brief__list li { grid-template-columns: 32px 1fr; }
+  .brief__list .impact { grid-column: 2; }
+  .qs li { grid-template-columns: 1fr; gap: 8px; }
+  .foot { grid-template-columns: 1fr; }
+  .ledger .co { white-space: normal; }
+}
+
+/* PDF */
+@page { size: A4; margin: 15mm 16mm 17mm; }
+@media print {
+  html { background: #fff; }
+  body { font-size: 9.4pt; line-height: 1.5; }
+  .issue { max-width: none; padding: 0; }
+  .head { padding: 18pt 0 16pt; }
+  .head__title { font-size: 28pt; }
+  .head__lead { font-size: 12.5pt; }
+  .brief { padding-top: 16pt; }
+  .brief__list li { font-size: 11pt; padding: 6pt 0; }
+  .section { padding-top: 20pt; break-before: auto; }
+  .section__head { break-after: avoid; }
+  .section__no { font-size: 22pt; }
+  .item { grid-template-columns: 105pt 1fr; column-gap: 16pt; padding: 11pt 0 12pt; }
+  .item__title { font-size: 13.5pt; margin-bottom: 5pt; }
+  .item__summary, .item__why { margin-bottom: 6pt; }
+  .item__foot { font-size: 8pt; }
+  .ledger { font-size: 8.8pt; }
+  .ledger .co { font-size: 11pt; }
+  .qs q { font-size: 11pt; }
+  .foot { font-size: 7.6pt; margin-top: 16pt; padding-top: 8pt; gap: 14pt; }
+  .foot__sign { padding-top: 2pt; }
+  .note { margin-top: 14pt; padding: 8pt 10pt; font-size: 8.8pt; }
+  .qs li { padding: 9pt 0; }
+  .ledger td { padding: 7pt 10pt 7pt 0; }
+  a { text-decoration: none; }
+}
