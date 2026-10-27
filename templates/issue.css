@@ -118,27 +118,37 @@ a:hover { color: var(--olive); text-decoration-color: var(--olive); }
 @page { size: A4; margin: 15mm 16mm 17mm; }
 @media print {
   html { background: #fff; }
-  body { font-size: 9.4pt; line-height: 1.5; }
+  body { font-size: 8.8pt; line-height: 1.42; }
   .issue { max-width: none; padding: 0; }
-  .head { padding: 18pt 0 16pt; }
-  .head__title { font-size: 28pt; }
-  .head__lead { font-size: 12.5pt; }
-  .brief { padding-top: 16pt; }
-  .brief__list li { font-size: 11pt; padding: 6pt 0; }
-  .section { padding-top: 20pt; break-before: auto; }
-  .section__head { break-after: avoid; }
-  .section__no { font-size: 22pt; }
-  .item { grid-template-columns: 105pt 1fr; column-gap: 16pt; padding: 11pt 0 12pt; }
-  .item__title { font-size: 13.5pt; margin-bottom: 5pt; }
-  .item__summary, .item__why { margin-bottom: 6pt; }
-  .item__foot { font-size: 8pt; }
-  .ledger { font-size: 8.8pt; }
-  .ledger .co { font-size: 11pt; }
-  .qs q { font-size: 11pt; }
-  .foot { font-size: 7.6pt; margin-top: 16pt; padding-top: 8pt; gap: 14pt; }
-  .foot__sign { padding-top: 2pt; }
-  .note { margin-top: 14pt; padding: 8pt 10pt; font-size: 8.8pt; }
-  .qs li { padding: 9pt 0; }
-  .ledger td { padding: 7pt 10pt 7pt 0; }
+  .top { padding-bottom: 7pt; }
+  .head { padding: 12pt 0 11pt; }
+  .head__title { font-size: 24pt; margin-bottom: 8pt; max-width: 24ch; }
+  .head__lead { font-size: 11pt; }
+  .head__meta { margin-top: 10pt; }
+  .brief { padding-top: 11pt; }
+  .brief__list { margin-top: 8pt; }
+  .brief__list li { font-size: 10pt; padding: 4pt 0; grid-template-columns: 28pt 1fr auto; }
+  .section { padding-top: 14pt; }
+  .section__head { break-after: avoid; padding-bottom: 6pt; }
+  .section__no { font-size: 18pt; }
+  .item { grid-template-columns: 74pt 1fr; column-gap: 14pt; padding: 8pt 0 9pt; }
+  .item__side { gap: 4pt; padding-top: 2pt; }
+  .item__title { font-size: 12.2pt; margin-bottom: 4pt; }
+  .item__summary { margin-bottom: 4pt; }
+  .item__why { margin-bottom: 5pt; }
+  .item__foot { font-size: 7.4pt; gap: 2pt 12pt; }
+  .label { font-size: 7pt; }
+  .impact { font-size: 7pt; gap: 3pt; }
+  .impact i { width: 5pt; height: 5pt; }
+  .chip { font-size: 6.5pt; padding: 2pt 3pt 1.5pt; }
+  .ledger { font-size: 8.4pt; }
+  .ledger th { padding: 6pt 8pt 4pt 0; }
+  .ledger td { padding: 5pt 8pt 5pt 0; }
+  .ledger .co { font-size: 10pt; }
+  .qs li { padding: 6pt 0; gap: 14pt; }
+  .qs q { font-size: 10pt; }
+  .note { margin-top: 10pt; padding: 6pt 9pt; font-size: 8.4pt; }
+  .foot { font-size: 7.2pt; margin-top: 12pt; padding-top: 7pt; gap: 12pt; }
+  .foot__sign { padding-top: 0; }
   a { text-decoration: none; }
 }
