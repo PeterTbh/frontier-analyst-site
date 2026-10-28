@@ -22,6 +22,10 @@ site:
 topics:                        # one file per section, in this order
   - topics/example.md
 
+watch:                         # optional cross-topic watchlists (RUN.md steps 1 and 2)
+  people: people.yaml
+  newsletters: state/newsletters.json
+
 # Words that must never appear in an issue: your company name, project names, people.
 confidential_terms: []
 

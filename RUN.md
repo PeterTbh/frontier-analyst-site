@@ -18,7 +18,9 @@ Paths below use `$E` for the engine checkout and `$W` for the workspace checkout
 2. `pip install --break-system-packages -q jinja2 pyyaml cryptography pypdf` if any import fails.
    Chromium and Playwright must be available for the PDF.
 3. Read `$W/config.yaml`, every file listed under `topics:`, `$W/state/seen.json`,
-   `$W/state/sources.json` and `$W/issues/manifest.json` (may not exist yet).
+   `$W/state/sources.json` and `$W/issues/manifest.json` (may not exist yet). If `watch:` is set
+   in the config, also read the people watchlist (`watch.people`) and the newsletter registry
+   (`watch.newsletters`).
 4. Issue number = last number + 1 (or 1). Window: from the last issue's date (or
    `first_issue_lookback_days` ago) to today. Issue folder: `issues/<today>-no<N>` in `$W`.
    **Guard:** if the last issue is dated today or yesterday, stop here and report
@@ -27,12 +29,32 @@ Paths below use `$E` for the engine checkout and `$W` for the workspace checkout
 
 ## 1. Newsletters
 
-If a Gmail tool is available and `delivery.newsletter_address` is set:
-- Search `deliveredto:<newsletter_address> after:<from>`.
-- Read each newsletter. Note candidate items, and prefer the primary source it links to over the
-  newsletter's own wording.
-- Move each newsletter out of the inbox into `delivery.newsletter_label`: create the label if it
-  is missing, add it, and remove `INBOX`.
+If a Gmail tool is available and `delivery.newsletter_address` is set. Gmail rate-limits reading
+message headers and bodies ("Resource has been exhausted"); searches that return thread IDs only
+(`view: THREAD_VIEW_IDS_ONLY`) keep working. So count and match with ID-only searches, and read
+only what matters.
+
+1. **List.** One ID-only search for `deliveredto:<newsletter_address> after:<from>`, paging
+   through all results. If the newsletter registry exists, run one ID-only search per entry,
+   `deliveredto:<newsletter_address> after:<from> from:(<match>)`, to map threads to publications.
+   Threads that match no entry are unknown senders (usually lists added by Substack
+   recommendations).
+2. **Status.** Two more ID-only searches in the window: `subject:(confirm OR verify OR
+   verification)` and `subject:(welcome OR subscribed)`. In the registry, set `status` to `live`
+   once a welcome or an issue has arrived, or `pending-confirm` when only a confirmation request
+   has, and set `last_seen`. Never click a confirmation, sign-in or unsubscribe link. Pending
+   ones go in the report.
+3. **Triage and read.** Skip welcome, confirmation and receipt emails and `ignore`-tier senders.
+   Read `core` first, then `scan` threads whose subject looks relevant. Read at most about 25
+   bodies, as `PLAIN_TEXT`, 30–60 seconds apart. After "Resource has been exhausted", wait 2
+   minutes and retry once, then move on and mention it in `note`.
+4. **Use.** Note candidate items and prefer the primary source a newsletter points to. Links
+   inside emails are tracking redirects that cannot be opened directly, so search for the primary
+   source's title and open the URL from the search result. If no primary can be found, cite the
+   newsletter's web version (found by search) with source type `Analysis`.
+5. **File.** If a Gmail filter already labels these emails and skips the inbox, do nothing.
+   Otherwise add `delivery.newsletter_label` and remove `INBOX` only on the threads you read
+   (create the label if it is missing), to save quota.
 
 ## 2. Scan
 
@@ -41,7 +63,10 @@ split by `weight` (high ≈ half, the rest shared). Stop early when the topics a
 
 For each topic, in this order:
 1. **Known primary sources** in `$W/state/sources.json` (company blogs, preprint listings, regulator
-   pages, newsletter archives): fetch and look for entries dated inside the window.
+   pages, newsletter archives): fetch and look for entries dated inside the window. Skip entries
+   with `delivery: email`, which step 1 already covered. An unattended run can open a URL only if
+   it appears in the scheduled task's prompt or in a search result. If a fetch asks for
+   permission, search for the source by name and open the URL from the results instead.
 2. **Companies and people** named in the brief: search for news in the window (funding, launch,
    pricing, customers, hires, papers). Use the current year in queries.
 3. **Search terms** from the brief.
@@ -49,6 +74,12 @@ For each topic, in this order:
    window on the topic; use a transcript or show notes only if accessible. Never summarise whole
    episodes, only the relevant claim.
 5. **Coming up**: deadlines and events in the next 14 days.
+
+6. **People** (once per run, after the topics, about 10 searches). If the people watchlist
+   exists: for each `priority: high` person, search `"<name>" <month> <year>` and check their
+   `direct` channels (own newsletter, blog, transcripts) for anything inside the window. For
+   `normal` people, only note what the rest of the scan surfaced. Keep claims that meet
+   `ANALYST.md` → People, and file each under the topic it affects.
 
 Keep a scratch list of candidates in `$W/work/candidates.md` (gitignored): title, date, URL,
 source, one-line claim, topic. Ignore anything dated before the window unless it surfaced only now
@@ -110,11 +141,14 @@ No attachments: the PDF is on the website (Download PDF) and in the workspace.
 
 End the run with a short summary: issue number, items per section, sources that failed or were
 paywalled, items dropped for low credibility, and anything that needs the owner's attention
-(e.g. a topic file that produced nothing for three issues in a row).
+(e.g. a topic file that produced nothing for three issues in a row). From the newsletter registry,
+list subscriptions still `pending-confirm`, `core` or `scan` newsletters silent for three issues,
+and new unknown senders.
 
 ## If something fails
 
 - A source is unreachable: skip it, mention it in `note`.
 - Nothing clears the bar in a section: publish the section as empty ("Nothing that clears the bar").
-- Gmail unavailable: publish anyway and say so in the report.
+- Gmail unavailable or rate-limited: work with what was read, publish anyway and say so in the
+  report.
 - A push is rejected: fetch, rebase, push again once. Never force-push.

@@ -18,7 +18,7 @@ except ImportError:  # pragma: no cover
     yaml = None
 
 KINDS_HINT = {"Funding", "Launch", "Paper", "Preprint", "Policy", "Partnership", "Model release",
-              "Hire", "Benchmark", "Field report", "Essay", "Deal", "Data release", "Event"}
+              "Hire", "Benchmark", "Field report", "Essay", "Interview", "Deal", "Data release", "Event"}
 SOURCE_TYPES = {"Primary", "Press", "Preprint", "Analysis", "Rumour"}
 CRED = {"High", "Medium", "Low"}
 HYPE = ["revolutionary", "groundbreaking", "game-changing", "game changer", "unprecedented",

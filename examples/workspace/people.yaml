@@ -1,0 +1,22 @@
+# Example people watchlist. Copy to your private workspace and replace the entries.
+# priority: high = one dated search per run plus their direct channels; normal = recognise only.
+# reach: direct = their own words are readable (newsletter, blog, transcripts); indirect = only quoted.
+# verified: false = URL not opened yet; check on first use, then record the date.
+
+people:
+  - name: Example Founder
+    role: CEO, Example Cells Inc.
+    priority: high
+    reach: direct
+    topics: [solid-state-batteries]
+    channels:
+      newsletter: {name: Founder's Substack, url: "https://example.substack.com", via: email}
+      transcripts: {name: Example Podcast transcripts, url: "https://example.com/podcast/", verified: false}
+
+  - name: Example Researcher
+    role: Professor of materials science
+    priority: normal
+    reach: indirect
+    topics: [solid-state-batteries]
+    channels:
+      interviews: {name: press and conference talks}

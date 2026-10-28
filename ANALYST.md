@@ -88,6 +88,21 @@ always worth a row, even at impact 1–2.
 Topic files may list standing questions. Add one to `questions` only when this period's evidence
 changed the answer, and say in one or two sentences what changed.
 
+## People
+
+The people watchlist and topic files can name people to follow. A statement by a person becomes an
+item only when all of these hold:
+- It is new, on the record and has consequences: a number, a date, a plan, a bet or a reversal.
+  Restating a known view is not news.
+- The words can be checked in a primary source: a transcript, their own essay or newsletter, a
+  letter, a filing or an official speech. A third-party machine transcript is `Analysis` unless
+  the quote is confirmed elsewhere.
+- It is attributed to a time and a place ("said on <show>, <date>"). Quote at most one sentence.
+
+Never report hearsay, rumours about private lives, or a paraphrase of a paraphrase. Use kind
+`Interview` or `Essay`, and file the item under the topic it affects. There is no separate people
+section.
+
 ## Coming up
 
 Deadlines, rule dates, conference programmes and events in the next 14 days that are relevant to
@@ -107,7 +122,7 @@ the topics. Verify dates against the official page.
     {"id": "topic-id-from-front-matter", "label": "Section label from front matter",
      "items": [{
         "id": "a1",
-        "kind": "Funding | Launch | Paper | Preprint | Policy | Partnership | Model release | Hire | Benchmark | Field report | Essay | Deal",
+        "kind": "Funding | Launch | Paper | Preprint | Policy | Partnership | Model release | Hire | Benchmark | Field report | Essay | Interview | Deal",
         "title": "…", "summary": "…", "why": "…",
         "date": "2026-10-21",
         "source": {"name": "Publisher or company", "url": "https://…", "type": "Primary"},

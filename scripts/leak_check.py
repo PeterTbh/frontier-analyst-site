@@ -7,8 +7,9 @@ Checks every file that git would publish (tracked + untracked, minus .gitignore)
   * docs/ contains only the viewer, fonts, site.json and encrypted envelopes
   * every docs/data/*.enc is a well-formed encrypted envelope
   * site.json holds only the public key and the password-locked private key
-  * no published file contains a distinctive line from the topic files, an issue title or
-    headline, a confidential term from the workspace config, or a source URL from an issue
+  * no published file contains a distinctive line from the topic files or the people watchlist,
+    a watched person's name, an issue title or headline, a confidential term from the workspace
+    config, or a source URL from an issue
 Exit code 0 = clean, 1 = leak found (do not push).
 """
 import argparse
@@ -50,6 +51,16 @@ def needles(ws):
             line = line.strip().strip("-*#|` ").strip()
             if len(line) >= 40:                      # long, distinctive lines only
                 found.add(line.lower()[:80])
+    people = (cfg.get("watch") or {}).get("people")
+    if people and yaml and os.path.exists(os.path.join(ws, people)):
+        pdata = yaml.safe_load(open(os.path.join(ws, people))) or {}
+        for p in pdata.get("people") or []:
+            if p.get("name") and len(p["name"]) >= 8:          # who the reader follows is private
+                found.add(str(p["name"]).lower())
+        for line in open(os.path.join(ws, people)):
+            line = line.strip().strip("-*#|` ").strip()
+            if len(line) >= 40:
+                found.add(line.lower()[:80])
     idir = os.path.join(ws, "issues")
     for root, _, files in os.walk(idir):
         if "issue.json" in files:
@@ -76,7 +87,7 @@ def main():
     for f in files:
         if f.startswith("docs/") and not ALLOWED_DOCS.match(f):
             problems.append(f"unexpected file in docs/: {f}")
-        if f.startswith(("topics/", "issues/", "state/", "secrets/")) or f.endswith(("config.yaml",)) and not f.startswith("examples/"):
+        if f.startswith(("topics/", "issues/", "state/", "secrets/")) or f in ("people.yaml",) or f.endswith(("config.yaml",)) and not f.startswith("examples/"):
             problems.append(f"workspace file inside the public repo: {f}")
 
     for f in files:

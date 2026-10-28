@@ -38,12 +38,29 @@ Claude then follows the steps below.
    (`pip install xkcdpass` first.) Show the reader the passphrase **once**, then delete the file.
    It is not stored anywhere else, and it is never committed.
 4. **Reset the site.** Remove any `docs/data/*.enc` copied from the template, commit `docs/site.json`.
-5. **First issue.** Follow `RUN.md` once, by hand, and let the reader review it.
-6. **Schedule.** Create a scheduled task (for example Tuesday and Friday early morning) whose
+5. **Newsletters and people.** Build the reader a private sign-up checklist: one row per
+   newsletter, each with a link to its sign-up page, plus a button that copies
+   `delivery.newsletter_address`. The reader subscribes by hand and declines Substack's
+   recommendations. Then check the inbox with ID-only searches (see `RUN.md` step 1), give the
+   reader the confirmation links that are still open, and fill `state/newsletters.json`. Write
+   `people.yaml` from the people the reader names, recording how each can actually be read.
+   Point `watch:` in `config.yaml` at both files.
+6. **First issue.** Follow `RUN.md` once, by hand, and let the reader review it.
+7. **Schedule.** Create a scheduled task (for example Tuesday and Friday early morning) whose
    prompt is:
    > Produce the next Frontier Analyst issue. Engine repo `<you>/<public-repo>`, workspace repo
    > `<you>/<private-repo>`. Attach both with push access, clone them, then follow RUN.md in the
-   > engine repo exactly.
+   > engine repo exactly. You may open these source URLs directly: <feeds and transcript pages>.
+
+   List the feed and transcript URLs in the prompt itself. An unattended run can only open
+   URLs that come from its prompt or from a search result.
+
+## 3b. Gmail filter (You, 1 minute)
+
+In the Gmail account the newsletters go to: **Settings → Filters and blocked addresses → Create a
+new filter → To: `<newsletter_address>` → Create filter → Skip the Inbox, Apply the label
+`<newsletter_label>`, Never send it to Spam → Create filter.** After that, runs don't need to move
+messages.
 
 ## 4. Turn on the website (You, 30 seconds)
 
@@ -53,6 +70,8 @@ In the public repo: **Settings → Pages → Build and deployment → Deploy fro
 ## Changing things later
 
 - **What gets researched:** edit or replace files in `topics/` in the workspace.
+- **People and newsletters:** edit `people.yaml` and `state/newsletters.json` in the workspace.
+  Set a newsletter's `tier` to `ignore` to stop runs reading it.
 - **Who gets the email, page limit, schedule:** `config.yaml` in the workspace (the schedule itself
   is changed in the scheduled task's settings).
 - **New passphrase:** generate one, run `keygen` again, then
