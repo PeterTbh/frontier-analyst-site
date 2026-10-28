@@ -11,7 +11,7 @@ issue:
 delivery:
   email_to:
     - you@example.com
-  newsletter_address: ""       # optional: an address whose newsletters the run reads, e.g. you+briefing@gmail.com
+  newsletter_address: ""       # optional: address (or list) whose newsletters the run reads; briefings may share one
   newsletter_label: "Frontier Analyst/Newsletters"
 
 site:

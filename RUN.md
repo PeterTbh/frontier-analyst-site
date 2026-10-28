@@ -29,10 +29,12 @@ Paths below use `$E` for the engine checkout and `$W` for the workspace checkout
 
 ## 1. Newsletters
 
-If a Gmail tool is available and `delivery.newsletter_address` is set. Gmail rate-limits reading
-message headers and bodies ("Resource has been exhausted"); searches that return thread IDs only
-(`view: THREAD_VIEW_IDS_ONLY`) keep working. So count and match with ID-only searches, and read
-only what matters.
+If a Gmail tool is available and `delivery.newsletter_address` is set. It can be one address or a
+list, and several briefings may share an address: each workspace keeps its own registry and
+tiers. With a list, use `deliveredto:(<a> OR <b>)` wherever `<newsletter_address>` appears below.
+Gmail rate-limits reading message headers and bodies ("Resource has been exhausted"); searches
+that return thread IDs only (`view: THREAD_VIEW_IDS_ONLY`) keep working. So count and match with
+ID-only searches, and read only what matters.
 
 1. **List.** One ID-only search for `deliveredto:<newsletter_address> after:<from>`, paging
    through all results. If the newsletter registry exists, run one ID-only search per entry,
@@ -44,10 +46,17 @@ only what matters.
    once a welcome or an issue has arrived, or `pending-confirm` when only a confirmation request
    has, and set `last_seen`. Never click a confirmation, sign-in or unsubscribe link. Pending
    ones go in the report.
-3. **Triage and read.** Skip welcome, confirmation and receipt emails and `ignore`-tier senders.
-   Read `core` first, then `scan` threads whose subject looks relevant. Read at most about 25
-   bodies, as `PLAIN_TEXT`, 30–60 seconds apart. After "Resource has been exhausted", wait 2
-   minutes and retry once, then move on and mention it in `note`.
+3. **Triage and read.** Decide what to open from the registry, not by reading subject lines first,
+   because header reads cost the same quota as bodies. ID-only results come newest first.
+   - `core`: open every thread in the window, except for `cadence: daily` senders, where you open
+     only the newest.
+   - `scan`: open the newest thread per sender while the budget lasts, dailies first.
+   - `headlines`: don't open. If quota allows, run one search with `view: THREAD_VIEW_MINIMAL` and
+     a page size of 10–20 to get their subject lines, and use them only as leads to search for.
+   - `ignore`, unknown senders, and welcome, confirmation and receipt emails: skip.
+
+   Read at most about 25 bodies, as `PLAIN_TEXT`, 30–60 seconds apart. After "Resource has been
+   exhausted", wait 2 minutes and retry once, then move on and mention it in `note`.
 4. **Use.** Note candidate items and prefer the primary source a newsletter points to. Links
    inside emails are tracking redirects that cannot be opened directly, so search for the primary
    source's title and open the URL from the search result. If no primary can be found, cite the

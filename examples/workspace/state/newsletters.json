@@ -1,6 +1,21 @@
 {
- "notes": "Newsletters delivered to delivery.newsletter_address. RUN.md step 1 maps threads to entries with one ID-only Gmail search per entry: from:(<match>). tier: core | scan | ignore. status: live | likely-live | pending-confirm | unclear | not-received | not-subscribed | dormant.",
+ "notes": "Newsletters delivered to delivery.newsletter_address (one address or a list; several briefings may share it, each with its own registry). RUN.md step 1 maps threads to entries with one ID-only Gmail search per entry: from:(<match>). tier: core = open every issue (newest only for daily senders) | scan = open the newest issue while budget lasts | headlines = never open, subject lines are leads only | ignore = skip. status: live | likely-live | pending-confirm | unclear | not-received | not-subscribed | dormant.",
  "newsletters": {
-  "example-weekly": {"name": "Example Weekly", "match": "exampleweekly OR \"Example Weekly\"", "tier": "core", "status": "live", "cadence": "weekly", "checked": "2026-10-28"}
+  "example-weekly": {
+   "name": "Example Weekly",
+   "match": "exampleweekly OR \"Example Weekly\"",
+   "tier": "core",
+   "status": "live",
+   "cadence": "weekly",
+   "checked": "2026-10-28"
+  },
+  "example-daily": {
+   "name": "Example Daily Deals",
+   "match": "exampledaily",
+   "tier": "headlines",
+   "status": "live",
+   "cadence": "daily",
+   "checked": "2026-10-28"
+  }
  }
 }

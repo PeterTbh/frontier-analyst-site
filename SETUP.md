@@ -71,7 +71,12 @@ In the public repo: **Settings → Pages → Build and deployment → Deploy fro
 
 - **What gets researched:** edit or replace files in `topics/` in the workspace.
 - **People and newsletters:** edit `people.yaml` and `state/newsletters.json` in the workspace.
-  Set a newsletter's `tier` to `ignore` to stop runs reading it.
+  Set a newsletter's `tier` to `ignore` to stop runs reading it, or to `headlines` to use only its
+  subject lines.
+- **A second briefing on other topics:** it can reuse the same `newsletter_address`, so there is
+  no need to resubscribe. Copy the registry into its workspace and set its own tiers, and add any
+  topic-specific address to a list. Schedule it at a different time, because both share the Gmail
+  quota.
 - **Who gets the email, page limit, schedule:** `config.yaml` in the workspace (the schedule itself
   is changed in the scheduled task's settings).
 - **New passphrase:** generate one, run `keygen` again, then
