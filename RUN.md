@@ -18,7 +18,8 @@ Paths below use `$E` for the engine checkout and `$W` for the workspace checkout
 2. `pip install --break-system-packages -q jinja2 pyyaml cryptography pypdf` if any import fails.
    Chromium and Playwright must be available for the PDF.
 3. Read `$W/config.yaml`, every file listed under `topics:`, `$W/state/seen.json`,
-   `$W/state/sources.json` and `$W/issues/manifest.json` (may not exist yet). If `watch:` is set
+   `$W/state/sources.json`, `$W/state/carryover.json` (may not exist) and
+   `$W/issues/manifest.json` (may not exist yet). If `watch:` is set
    in the config, also read the people watchlist (`watch.people`) and the newsletter registry
    (`watch.newsletters`).
 4. Issue number = last number + 1 (or 1). Window: from the last issue's date (or
@@ -73,15 +74,17 @@ split by `weight` (high ≈ half, the rest shared). Stop early when the topics a
 For each topic, in this order:
 1. **Known primary sources** in `$W/state/sources.json` (company blogs, preprint listings, regulator
    pages, newsletter archives): fetch and look for entries dated inside the window. Skip entries
-   with `delivery: email`, which step 1 already covered. An unattended run can open a URL only if
-   it appears in the scheduled task's prompt or in a search result. If a fetch asks for
-   permission, search for the source by name and open the URL from the results instead.
+   with `delivery: email` **only if that publication actually delivered** (step 1); a `core` or
+   `scan` publication that sent nothing is read from its web archive instead. An unattended run can
+   open a URL only if it appears in the scheduled task's prompt or in a search result. If a fetch
+   asks for permission, search for the source by name and open the URL from the results instead.
+   A source entry may set `access: mcp-connector` when a connector reads it better than its URL.
 2. **Companies and people** named in the brief: search for news in the window (funding, launch,
    pricing, customers, hires, papers). Use the current year in queries.
 3. **Search terms** from the brief.
-4. **Channels** (YouTube, podcasts, Substack) named in the brief: look for episodes or posts in the
-   window on the topic; use a transcript or show notes only if accessible. Never summarise whole
-   episodes, only the relevant claim.
+4. **Channels** (YouTube, podcasts, Substack) named in the brief: list what appeared in the window,
+   then read only what looks relevant, by **Reading channels and archives** below. Never summarise
+   whole episodes, only the relevant claim.
 5. **Coming up**: deadlines and events in the next 14 days.
 
 6. **People** (once per run, after the topics, about 10 searches). If the people watchlist
@@ -89,6 +92,28 @@ For each topic, in this order:
    `direct` channels (own newsletter, blog, transcripts) for anything inside the window. For
    `normal` people, only note what the rest of the scan surfaced. Keep claims that meet
    `ANALYST.md` → People, and file each under the topic it affects.
+
+### Reading channels and archives
+
+Access paths by platform, tested 2026-10-30. Which publications these apply to is workspace
+material: keep the names, URLs and results in `$W/state/sources.json`, never here. Prefer the first
+path that works, and record failures in `note`.
+
+- **Substack-hosted sites** (newsletters, and podcasts that host there): fetch `<domain>/archive`,
+  which lists post dates, titles and URLs. The homepage renders nothing, and `/api/v1/archive`
+  returned months-old posts, so do not trust it. Post pages carry the full text, including
+  interview transcripts. This is also how a `core` publication that has not emailed yet gets read.
+- **Podcasts**: prefer a transcript the show publishes itself. Those are `Primary` and quotable.
+  Where an episode list refuses to fetch, a transcripts index or category page often works.
+- **Third-party machine transcripts**: timestamped, but typically carry **no speaker labels**, so a
+  quote cannot be attributed to one host and will not meet `ANALYST.md` → People. Treat them as
+  leads only, and confirm the words in a primary source before quoting.
+- **Video pages**: expect title, channel, publish date, description and chapter titles, but **no
+  transcript**. Enough to judge whether an episode matters, never enough to quote. Library or
+  show-notes pages that wrap a video are usually metadata only, the same limit. Always read the
+  publish date off the page: searches surface old videos as if they were current.
+- **Long pages**: a fetch returns the first 100k characters and says how many remain. Transcripts
+  run past this, so re-fetch with the stated `offset` when the part you need is missing.
 
 Keep a scratch list of candidates in `$W/work/candidates.md` (gitignored): title, date, URL,
 source, one-line claim, topic. Ignore anything dated before the window unless it surfaced only now
@@ -99,6 +124,9 @@ When a feed or listing URL proves useful and stable, add it to `$W/state/sources
 
 ## 3. Triage
 
+- Add anything in `state/carryover.json` that is still inside its `use_by`: items found after the
+  last issue was built, so they predate this window. Judge them like any other candidate, verify
+  the primary source the entry names, and delete entries once used or expired.
 - Drop anything already in `state/seen.json` (same URL, or the same event: same actor + same
   action + same number).
 - Apply each topic's inclusion bar and leave-out list (`ANALYST.md` → Inclusion).
