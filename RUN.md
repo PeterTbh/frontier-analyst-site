@@ -85,9 +85,16 @@ For each topic, in this order:
 4. **Channels** (YouTube, podcasts, Substack) named in the brief: list what appeared in the window,
    then read only what looks relevant, by **Reading channels and archives** below. Never summarise
    whole episodes, only the relevant claim.
-5. **Coming up**: deadlines and events in the next 14 days.
+5. **Scoops and moves** (about 5 searches, once per run): the things no feed carries. For the
+   companies and people in the brief, look for raises and rumoured raises, acquisitions, exec
+   departures and hires, shutdowns, lawsuits, and disputes between the players. A daily tech
+   aggregator is usually the cheapest way in, because it both collects the paywalled scoops and
+   quotes the notable social posts that cannot be read directly. Rate these honestly: an
+   unconfirmed single report is `Rumour` / Low, which `ANALYST.md` admits only at impact 4-5 and
+   only with a line on what would confirm it. Gossip with no consequence for the field stays out.
+6. **Coming up**: deadlines and events in the next 14 days.
 
-6. **People** (once per run, after the topics, about 10 searches). If the people watchlist
+7. **People** (once per run, after the topics, about 10 searches). If the people watchlist
    exists: for each `priority: high` person, search `"<name>" <month> <year>` and check their
    `direct` channels (own newsletter, blog, transcripts) for anything inside the window. For
    `normal` people, only note what the rest of the scan surfaced. Keep claims that meet
@@ -114,6 +121,10 @@ path that works, and record failures in `note`.
   publish date off the page: searches surface old videos as if they were current.
 - **Long pages**: a fetch returns the first 100k characters and says how many remain. Transcripts
   run past this, so re-fetch with the stated `offset` when the part you need is missing.
+- **Machine-readable API endpoints** (preprint query APIs and similar) are often robots-disallowed
+  to the fetch tool even when the human-facing pages are fine. Search for the item instead and open
+  its own page, which works. Mark a source `access: unavailable` once it has refused, with the
+  reason, so later runs stop paying for the retry.
 
 Keep a scratch list of candidates in `$W/work/candidates.md` (gitignored): title, date, URL,
 source, one-line claim, topic. Ignore anything dated before the window unless it surfaced only now
@@ -181,6 +192,14 @@ paywalled, items dropped for low credibility, and anything that needs the owner'
 (e.g. a topic file that produced nothing for three issues in a row). From the newsletter registry,
 list subscriptions still `pending-confirm`, `core` or `scan` newsletters silent for three issues,
 and new unknown senders.
+
+**Source health.** Say which sources are broken rather than merely quiet, because the two look
+identical from an empty inbox. For every `core` publication that sent no email in the window, check
+its web archive and report which of the two it is: *publishing but not delivering*, which the owner
+can fix, or *genuinely quiet*, which needs nothing. Record the finding and the last web post date in
+the registry so the next run starts from it. Name any source that newly refused to load, and any
+paid publication that keeps surfacing as the origin of other outlets' stories, since a subscription
+the run cannot buy is the owner's call.
 
 ## If something fails
 
